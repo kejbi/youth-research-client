@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import User from "./contexts/UserContext";
-import Nav from "./components/nav/Nav";
+import Navbar from "./components/nav/Nav";
 import PageAlert from "./components/alert/PageAlert";
 import Header from "./components/header/Header";
 
@@ -12,7 +12,7 @@ const App = props => {
       <User>
         <Header />
         <div class='container'>
-          <Nav />
+          <Navbar />
           <PageAlert />
           <Switch>
             <Route />

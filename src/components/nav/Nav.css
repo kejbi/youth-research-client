@@ -1,0 +1,8 @@
+.navbar {
+  display: flex;
+}
+
+.navbar-item {
+  flex-grow: 1;
+  text-align: center;
+}
