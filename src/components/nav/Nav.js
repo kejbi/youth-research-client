@@ -14,32 +14,68 @@ const Navbar = props => {
     }
   };
 
-  return (
-    <Nav tabs className='navbar'>
-      <NavItem className='navbar-item'>
+  let links;
+  if (userState.isAuthenticated) {
+    links = {
+      one: (
         <NavLink
           className={classnames({ active: active === "1" })}
           onClick={() => toggle("1")}
         >
-          Witaj!
+          Posty
         </NavLink>
-      </NavItem>
-      <NavItem className='navbar-item'>
+      ),
+      two: (
         <NavLink
           className={classnames({ active: active === "2" })}
           onClick={() => toggle("2")}
         >
-          Zaloguj
+          Ankiety
         </NavLink>
-      </NavItem>
-      <NavItem className='navbar-item'>
+      ),
+      three: (
         <NavLink
           className={classnames({ active: active === "3" })}
           onClick={() => toggle("3")}
         >
-          Zarejestruj
+          Oceny
         </NavLink>
-      </NavItem>
+      )
+    };
+  } else {
+    links = {
+      one: (
+        <NavLink
+          className={classnames({ active: active === "1" })}
+          onClick={() => toggle("1")}
+        >
+          Witaj
+        </NavLink>
+      ),
+      two: (
+        <NavLink
+          className={classnames({ active: active === "2" })}
+          onClick={() => toggle("2")}
+        >
+          Logowanie
+        </NavLink>
+      ),
+      three: (
+        <NavLink
+          className={classnames({ active: active === "3" })}
+          onClick={() => toggle("3")}
+        >
+          Rejestracja
+        </NavLink>
+      )
+    };
+  }
+
+  return (
+    <Nav tabs className='navbar'>
+      <NavItem className='navbar-item'>{links.one}</NavItem>
+      <NavItem className='navbar-item'>{links.two}</NavItem>
+      <NavItem className='navbar-item'>{links.three}</NavItem>
     </Nav>
   );
 };
