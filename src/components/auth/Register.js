@@ -1,8 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import axios from "axios";
 import "./Auth.css";
+import { Redirect } from "react-router-dom";
 
 const Register = props => {
   const [userState, dispatch] = useContext(UserContext);
@@ -42,13 +43,22 @@ const Register = props => {
       });
   };
 
-  if (userState.isAuthenticated) {
-    dispatch({
-      type: "LOGOUT"
-    });
-  }
+  useEffect(() => {
+    if (userState.user.isAuthenticated) {
+      dispatch({
+        type: "MESSAGE",
+        payload: {
+          message:
+            "Jesteś zalogowany! Wyloguj się by zarejestrować nowego użytkownika",
+          type: "danger"
+        }
+      });
+    }
+  }, []);
 
-  return (
+  return userState.user.isAuthenticated ? (
+    <Redirect to='/' />
+  ) : (
     <Form onSubmit={handleSubmit}>
       <div className='error'>{error}</div>
       <FormGroup>

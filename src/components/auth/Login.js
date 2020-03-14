@@ -1,8 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
 import { UserContext } from "../../contexts/UserContext";
 import "./Auth.css";
+import { Redirect } from "react-router-dom";
 
 const Login = props => {
   const [userState, dispatch] = useContext(UserContext);
@@ -35,11 +36,15 @@ const Login = props => {
       })
       .catch(error => {
         console.log(error.response);
-        setError(error.response.data.message);
+        if (error.response.data.message === "Bad credentials") {
+          setError("Niepoprawne login lub hasło");
+        }
       });
   };
 
-  return (
+  return userState.user.isAuthenticated ? (
+    <Redirect to='/' />
+  ) : (
     <Form onSubmit={handleSubmit}>
       <div className='error'>{error}</div>
       <FormGroup>

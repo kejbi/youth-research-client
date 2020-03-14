@@ -53,10 +53,23 @@ const reducer = (state, action) => {
           type: "danger"
         }
       };
+    case "MESSAGE":
+      return {
+        ...state,
+        message: {
+          displayMessage: true,
+          message: action.payload.message,
+          type: action.payload.type
+        }
+      };
     case "MESSAGE_CLEAR":
       return {
         ...state,
-        displayMessage: false
+        message: {
+          displayMessage: false,
+          message: "",
+          type: "success"
+        }
       };
     default:
       return state;
