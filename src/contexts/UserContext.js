@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -7,36 +7,51 @@ const reducer = (state, action) => {
       localStorage.setItem("username", action.payload.username);
       localStorage.setItem("role", action.payload.role);
       return {
-        isAuthenticated: true,
-        token: action.payload.token,
-        username: action.payload.username,
-        role: action.payload.role,
-        displayMessage: true,
-        message: `Pomyślnie zalogowano ${action.payload.username}`
+        user: {
+          isAuthenticated: true,
+          token: action.payload.token,
+          username: action.payload.username,
+          role: action.payload.role
+        },
+        message: {
+          displayMessage: true,
+          message: `Pomyślnie zalogowano ${action.payload.username}`,
+          type: "success"
+        }
       };
     case "LOGOUT":
       localStorage.removeItem("token");
       localStorage.removeItem("username");
       localStorage.removeItem("role");
       return {
-        isAuthenticated: false,
-        token: null,
-        username: null,
-        role: null,
-        displayMessage: true,
-        message: "Pomyślnie wylogowano"
+        user: {
+          isAuthenticated: false,
+          token: null,
+          username: null,
+          role: null
+        },
+        message: {
+          displayMessage: true,
+          message: "Pomyślnie wylogowano",
+          type: "success"
+        }
       };
     case "TIMEOUT":
       localStorage.removeItem("token");
       localStorage.removeItem("username");
       localStorage.removeItem("role");
       return {
-        isAuthenticated: false,
-        token: null,
-        username: null,
-        role: null,
-        displayMessage: true,
-        message: "Sesja wygasła"
+        user: {
+          isAuthenticated: false,
+          token: null,
+          username: null,
+          role: null
+        },
+        message: {
+          displayMessage: true,
+          message: "Sesja wygasła",
+          type: "danger"
+        }
       };
     case "MESSAGE_CLEAR":
       return {
@@ -49,32 +64,40 @@ const reducer = (state, action) => {
 };
 
 const initialState = {
-  isAuthenticated: false,
-  token: null,
-  username: null,
-  role: null,
-  displayMessage: false,
-  message: null
+  user: {
+    isAuthenticated: false,
+    token: null,
+    username: null,
+    role: null
+  },
+  message: {
+    displayMessage: false,
+    message: null,
+    type: "success"
+  }
 };
 
 export const UserContext = createContext(initialState);
 
 const User = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  let token = localStorage.getItem("token");
-  let username = localStorage.getItem("username");
-  let role = localStorage.getItem("role");
 
-  if (token && username && role) {
-    dispatch({
-      type: "LOGIN",
-      payload: {
-        token: token,
-        username: username,
-        role: role
-      }
-    });
-  }
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    let username = localStorage.getItem("username");
+    let role = localStorage.getItem("role");
+
+    if (token && username && role) {
+      dispatch({
+        type: "LOGIN",
+        payload: {
+          token: token,
+          username: username,
+          role: role
+        }
+      });
+    }
+  }, []);
 
   return (
     <UserContext.Provider value={[state, dispatch]}>

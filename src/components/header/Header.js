@@ -5,14 +5,18 @@ import { Button } from "reactstrap";
 
 const Header = props => {
   const [userState, dispatch] = useContext(UserContext);
-
+  console.log(userState);
+  const logout = () => {
+    dispatch({
+      type: "LOGOUT"
+    });
+  };
   return (
     <header class='header'>
       <div class='name'>Nazwa programu</div>
-      {userState.isAuthenticated && (
+      {userState.user.isAuthenticated && (
         <div class='auth-content'>
-          <div>Zalogowany użytkownik: maniek12313{userState.username}</div>
-          <Button className='logout-btn' color='primary'>
+          <Button onClick={logout} className='logout-btn' color='primary'>
             Wyloguj
           </Button>
         </div>

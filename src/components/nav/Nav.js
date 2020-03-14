@@ -3,6 +3,7 @@ import { Nav, NavItem, NavLink } from "reactstrap";
 import "./Nav.css";
 import { UserContext } from "../../contexts/UserContext";
 import classnames from "classnames";
+import { useHistory, Link } from "react-router-dom";
 
 const Navbar = props => {
   const [userState, dispatch] = useContext(UserContext);
@@ -15,10 +16,11 @@ const Navbar = props => {
   };
 
   let links;
-  if (userState.isAuthenticated) {
+  if (userState.user.isAuthenticated) {
     links = {
       one: (
         <NavLink
+          tag={Link}
           className={classnames({ active: active === "1" })}
           onClick={() => toggle("1")}
         >
@@ -46,6 +48,8 @@ const Navbar = props => {
     links = {
       one: (
         <NavLink
+          tag={Link}
+          to='/'
           className={classnames({ active: active === "1" })}
           onClick={() => toggle("1")}
         >
@@ -54,6 +58,8 @@ const Navbar = props => {
       ),
       two: (
         <NavLink
+          tag={Link}
+          to='/logowanie'
           className={classnames({ active: active === "2" })}
           onClick={() => toggle("2")}
         >
@@ -62,6 +68,8 @@ const Navbar = props => {
       ),
       three: (
         <NavLink
+          tag={Link}
+          to='/rejestracja'
           className={classnames({ active: active === "3" })}
           onClick={() => toggle("3")}
         >
