@@ -9,9 +9,7 @@ const PageAlert = props => {
 
   return (
     userState.message.displayMessage && (
-      <Alert className={userState.message.type}>
-        {userState.message.message}
-      </Alert>
+      <Alert color={userState.message.type}>{userState.message.message}</Alert>
     )
   );
 };

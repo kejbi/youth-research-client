@@ -43,19 +43,6 @@ const Register = props => {
       });
   };
 
-  useEffect(() => {
-    if (userState.user.isAuthenticated) {
-      dispatch({
-        type: "MESSAGE",
-        payload: {
-          message:
-            "Jesteś zalogowany! Wyloguj się by zarejestrować nowego użytkownika",
-          type: "danger"
-        }
-      });
-    }
-  }, []);
-
   return userState.user.isAuthenticated ? (
     <Redirect to='/' />
   ) : (

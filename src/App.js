@@ -16,7 +16,6 @@ const App = props => {
         <div class='container'>
           <Header />
           <Navbar />
-          <PageAlert />
           <Switch>
             <Route exact path='/' component={Home} />
             <Route exact path='/logowanie' component={Login} />
