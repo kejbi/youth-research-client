@@ -3,15 +3,17 @@ import { Nav, NavItem, NavLink } from "reactstrap";
 import "./Nav.css";
 import { UserContext } from "../../contexts/UserContext";
 import classnames from "classnames";
+import { NavContext } from "../../contexts/NavContext";
+
 import { useHistory, Link } from "react-router-dom";
 
 const Navbar = props => {
   const [userState, dispatch] = useContext(UserContext);
-  const [active, setActive] = useState("1");
+  const [nav, dispatchNav] = useContext(NavContext);
 
   const toggle = tab => {
-    if (active !== tab) {
-      setActive(tab);
+    if (nav.tab !== tab) {
+      dispatchNav({ type: "CHANGE_TAB", tab: tab });
     }
   };
 
@@ -21,7 +23,7 @@ const Navbar = props => {
       one: (
         <NavLink
           tag={Link}
-          className={classnames({ active: active === "1" })}
+          className={classnames({ active: nav.tab === "1" })}
           onClick={() => toggle("1")}
         >
           Posty
@@ -29,7 +31,7 @@ const Navbar = props => {
       ),
       two: (
         <NavLink
-          className={classnames({ active: active === "2" })}
+          className={classnames({ active: nav.tab === "2" })}
           onClick={() => toggle("2")}
         >
           Ankiety
@@ -37,7 +39,7 @@ const Navbar = props => {
       ),
       three: (
         <NavLink
-          className={classnames({ active: active === "3" })}
+          className={classnames({ active: nav.tab === "3" })}
           onClick={() => toggle("3")}
         >
           Oceny
@@ -50,7 +52,7 @@ const Navbar = props => {
         <NavLink
           tag={Link}
           to='/'
-          className={classnames({ active: active === "1" })}
+          className={classnames({ active: nav.tab === "1" })}
           onClick={() => toggle("1")}
         >
           Witaj
@@ -60,7 +62,7 @@ const Navbar = props => {
         <NavLink
           tag={Link}
           to='/logowanie'
-          className={classnames({ active: active === "2" })}
+          className={classnames({ active: nav.tab === "2" })}
           onClick={() => toggle("2")}
         >
           Logowanie
@@ -70,7 +72,7 @@ const Navbar = props => {
         <NavLink
           tag={Link}
           to='/rejestracja'
-          className={classnames({ active: active === "3" })}
+          className={classnames({ active: nav.tab === "3" })}
           onClick={() => toggle("3")}
         >
           Rejestracja

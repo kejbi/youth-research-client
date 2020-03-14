@@ -8,6 +8,7 @@ import Header from "./components/header/Header";
 import Register from "./components/auth/Register";
 import Home from "./components/home/Home";
 import Login from "./components/auth/Login";
+import NavContextProvider from "./contexts/NavContext";
 
 const App = props => {
   return (
@@ -15,12 +16,15 @@ const App = props => {
       <User>
         <div class='container'>
           <Header />
-          <Navbar />
-          <Switch>
-            <Route exact path='/' component={Home} />
-            <Route exact path='/logowanie' component={Login} />
-            <Route exact path='/rejestracja' component={Register} />
-          </Switch>
+          <NavContextProvider>
+            <Navbar />
+            <PageAlert />
+            <Switch>
+              <Route exact path='/' component={Home} />
+              <Route exact path='/logowanie' component={Login} />
+              <Route exact path='/rejestracja' component={Register} />
+            </Switch>
+          </NavContextProvider>
         </div>
       </User>
     </Router>

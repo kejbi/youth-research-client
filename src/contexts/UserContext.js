@@ -2,6 +2,20 @@ import React, { createContext, useReducer, useEffect } from "react";
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case "INIT":
+      return {
+        user: {
+          isAuthenticated: false,
+          token: null,
+          username: null,
+          role: null
+        },
+        message: {
+          displayMessage: false,
+          message: "",
+          type: "success"
+        }
+      };
     case "LOGIN":
       localStorage.setItem("token", action.payload.token);
       localStorage.setItem("username", action.payload.username);
@@ -77,12 +91,7 @@ const reducer = (state, action) => {
 };
 
 const initialState = {
-  user: {
-    isAuthenticated: false,
-    token: null,
-    username: null,
-    role: null
-  },
+  user: null,
   message: {
     displayMessage: false,
     message: null,
@@ -109,14 +118,18 @@ const User = ({ children }) => {
           role: role
         }
       });
+    } else {
+      dispatch({ type: "INIT" });
     }
   }, []);
 
-  return (
-    <UserContext.Provider value={[state, dispatch]}>
-      {children}
-    </UserContext.Provider>
-  );
+  if (state.user === null) return null;
+  else
+    return (
+      <UserContext.Provider value={[state, dispatch]}>
+        {children}
+      </UserContext.Provider>
+    );
 };
 
 export default User;

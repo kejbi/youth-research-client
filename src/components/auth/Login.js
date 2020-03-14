@@ -4,9 +4,11 @@ import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
 import { UserContext } from "../../contexts/UserContext";
 import "./Auth.css";
 import { Redirect } from "react-router-dom";
+import { NavContext } from "../../contexts/NavContext";
 
 const Login = props => {
   const [userState, dispatch] = useContext(UserContext);
+  const [nav, dispatchNav] = useContext(NavContext);
   const [formState, setFormState] = useState({
     username: "",
     password: ""
@@ -41,6 +43,25 @@ const Login = props => {
         }
       });
   };
+
+  useEffect(() => {
+    dispatchNav({ type: "CHANGE_TAB", tab: "2" });
+
+    return () => {
+      console.log(userState);
+      if (userState.user.isAuthenticated) {
+        dispatch({
+          type: "MESSAGE",
+          payload: {
+            message:
+              "Jesteś zalogowany! Wyloguj się by zalogować nowego użytkownika",
+            type: "warning"
+          }
+        });
+        console.log(userState);
+      }
+    };
+  }, []);
 
   return userState.user.isAuthenticated ? (
     <Redirect to='/' />

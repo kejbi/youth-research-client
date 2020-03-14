@@ -1,15 +1,16 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Alert } from "reactstrap";
 import { UserContext } from "../../contexts/UserContext";
-import { useHistory } from "react-router-dom";
+import "./PageAlert.css";
 
 const PageAlert = props => {
   const [userState, dispatch] = useContext(UserContext);
-  const history = useHistory();
 
   return (
     userState.message.displayMessage && (
-      <Alert color={userState.message.type}>{userState.message.message}</Alert>
+      <Alert className='page-alert' color={userState.message.type}>
+        {userState.message.message}
+      </Alert>
     )
   );
 };
