@@ -5,7 +5,7 @@ import { UserContext } from "../../contexts/UserContext";
 import classnames from "classnames";
 import { NavContext } from "../../contexts/NavContext";
 
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Navbar = props => {
   const [userState, dispatch] = useContext(UserContext);

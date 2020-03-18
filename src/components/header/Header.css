@@ -16,7 +16,7 @@
 .auth-content {
   grid-column: 2;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   align-items: center;
   padding: 0 10% 0 10%;
   font-size: 0.85rem;

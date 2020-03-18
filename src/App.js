@@ -9,6 +9,7 @@ import Register from "./components/auth/Register";
 import Home from "./components/home/Home";
 import Login from "./components/auth/Login";
 import NavContextProvider from "./contexts/NavContext";
+import GroupChanger from "./components/group_changer/GroupChanger";
 
 const App = props => {
   return (
@@ -18,6 +19,7 @@ const App = props => {
           <Header />
           <NavContextProvider>
             <Navbar />
+            <GroupChanger />
             <PageAlert />
             <Switch>
               <Route exact path='/' component={Home} />
