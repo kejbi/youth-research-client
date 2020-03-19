@@ -1,5 +1,8 @@
 .group-changer {
-  padding-top: 2vw;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+}
+
+.group-pick {
+  width: 80%;
 }

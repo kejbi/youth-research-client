@@ -45,10 +45,11 @@ const Login = props => {
   };
 
   useEffect(() => {
-    dispatchNav({ type: "CHANGE_TAB", tab: "2" });
+    if (nav.tab !== "2") {
+      dispatchNav({ type: "CHANGE_TAB", tab: "2" });
+    }
 
     return () => {
-      console.log(userState);
       if (userState.user.isAuthenticated) {
         dispatch({
           type: "MESSAGE",
@@ -58,13 +59,12 @@ const Login = props => {
             type: "warning"
           }
         });
-        console.log(userState);
       }
     };
   }, []);
 
   return userState.user.isAuthenticated ? (
-    <Redirect to='/' />
+    <Redirect to='/posty' />
   ) : (
     <Form onSubmit={handleSubmit}>
       <div className='error'>{error}</div>

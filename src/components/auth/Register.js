@@ -46,9 +46,10 @@ const Register = props => {
   };
 
   useEffect(() => {
-    dispatchNav({ type: "CHANGE_TAB", tab: "3" });
+    if (nav.tab !== "3") {
+      dispatchNav({ type: "CHANGE_TAB", tab: "3" });
+    }
     return () => {
-      console.log(userState);
       if (userState.user.isAuthenticated) {
         dispatch({
           type: "MESSAGE",
@@ -58,13 +59,12 @@ const Register = props => {
             type: "warning"
           }
         });
-        console.log(userState);
       }
     };
   }, []);
 
   return userState.user.isAuthenticated ? (
-    <Redirect to='/' />
+    <Redirect to='/posty' />
   ) : (
     <Form onSubmit={handleSubmit}>
       <div className='error'>{error}</div>

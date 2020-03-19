@@ -14,6 +14,7 @@ const Navbar = props => {
   const toggle = tab => {
     if (nav.tab !== tab) {
       dispatchNav({ type: "CHANGE_TAB", tab: tab });
+      dispatch({ type: "MESSAGE_CLEAR" });
     }
   };
 

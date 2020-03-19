@@ -8,9 +8,6 @@ const Home = props => {
   const [nav, dispatchNav] = useContext(NavContext);
   useEffect(() => {
     dispatchNav({ type: "CHANGE_TAB", tab: "1" });
-    return () => {
-      dispatch({ type: "MESSAGE_CLEAR" });
-    };
   }, []);
   return (
     <div className='home-page'>
