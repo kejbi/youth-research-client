@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import { Spinner, Input } from "reactstrap";
+import { Spinner, Input, Label } from "reactstrap";
 import "./GroupChanger.css";
 import axios from "axios";
 import { GroupContext } from "../../contexts/GroupContext";
@@ -17,8 +17,10 @@ const GroupChanger = props => {
   };
 
   useEffect(() => {
+    console.log("group changer ");
     if (userState.user.isAuthenticated) {
       setLoading(true);
+      console.log("jestem");
       let config = {
         headers: {
           Authorization: "Bearer " + userState.user.token
@@ -30,8 +32,7 @@ const GroupChanger = props => {
           setGroups(response.data);
           console.log(response);
 
-          console.log(groups);
-          if (groups !== []) {
+          if (response.data.length !== 0) {
             dispatchGroup({
               type: "CHANGE_GROUP",
               groupId: response.data[0].id
@@ -40,11 +41,24 @@ const GroupChanger = props => {
           setLoading(false);
         })
         .catch(error => {
-          console.log(error);
-          if (error.response.data.status === 401) {
+          if (
+            error.response === undefined ||
+            error.response.data.status === 401
+          ) {
             dispatch({ type: "TIMEOUT" });
+          } else {
+            setLoading(false);
+            dispatch({
+              type: "MESSAGE",
+              payload: { message: "Coś poszło nie tak", type: "danger" }
+            });
           }
         });
+    } else {
+      dispatchGroup({
+        type: "CHANGE_GROUP",
+        groupId: null
+      });
     }
   }, [userState.user.isAuthenticated]);
 
@@ -55,7 +69,7 @@ const GroupChanger = props => {
           <Spinner color='primary' />
         ) : (
           <div className='group-pick'>
-            <div>Grupa: </div>
+            <Label>Grupa: </Label>
             <Input
               onChange={handleChange}
               className='group-input'

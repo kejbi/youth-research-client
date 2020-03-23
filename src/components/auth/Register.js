@@ -40,8 +40,12 @@ const Register = props => {
         console.log(response.data);
       })
       .catch(error => {
-        console.log(error.response);
-        setError(error.response.data.message);
+        if (error.response === undefined) {
+          dispatch({
+            type: "MESSAGE",
+            payload: { message: "Błąd serwera", type: "danger" }
+          });
+        }
       });
   };
 

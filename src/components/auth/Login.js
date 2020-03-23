@@ -37,9 +37,18 @@ const Login = props => {
         });
       })
       .catch(error => {
-        console.log(error.response);
-        if (error.response.data.message === "Bad credentials") {
+        if (error.response === undefined) {
+          dispatch({
+            type: "MESSAGE",
+            payload: { message: "Błąd serwera", type: "danger" }
+          });
+        } else if (error.response.data.message === "Bad credentials") {
           setError("Niepoprawne login lub hasło");
+        } else {
+          dispatch({
+            type: "MESSAGE",
+            payload: { message: "Coś poszło nie tak", type: "danger" }
+          });
         }
       });
   };

@@ -1,0 +1,23 @@
+.no-posts {
+  display: flex;
+  justify-content: center;
+  padding-top: 1vw;
+}
+
+.post {
+  max-width: 100% !important;
+}
+
+.post-form {
+  padding: 3%;
+  border-bottom: lightgray solid 1px;
+}
+
+.loading-spinner {
+  flex-direction: row;
+  padding: 3%;
+}
+
+.post-header {
+  justify-content: space-between;
+}

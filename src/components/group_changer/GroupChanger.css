@@ -1,8 +1,11 @@
 .group-changer {
   display: flex;
+  flex-direction: row;
   justify-content: space-around;
+  border-bottom: lightgray solid 1px;
 }
 
 .group-pick {
   width: 80%;
+  padding-bottom: 3%;
 }
