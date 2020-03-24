@@ -12,6 +12,7 @@ import NavContextProvider from "./contexts/NavContext";
 import GroupChanger from "./components/group_changer/GroupChanger";
 import GroupContextProvider from "./contexts/GroupContext";
 import Posts from "./components/posts/Posts";
+import Polls from "./components/polls/Polls";
 
 const App = props => {
   return (
@@ -29,6 +30,7 @@ const App = props => {
                 <Route exact path='/logowanie' component={Login} />
                 <Route exact path='/rejestracja' component={Register} />
                 <Route exact path='/posty' component={Posts} />
+                <Route exact path='/ankiety' component={Polls} />
               </Switch>
             </GroupContextProvider>
           </NavContextProvider>

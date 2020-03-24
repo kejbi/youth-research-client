@@ -24,6 +24,7 @@ const Navbar = props => {
       one: (
         <NavLink
           tag={Link}
+          to='/posty'
           className={classnames({ active: nav.tab === "1" })}
           onClick={() => toggle("1")}
         >
@@ -32,6 +33,8 @@ const Navbar = props => {
       ),
       two: (
         <NavLink
+          tag={Link}
+          to='/ankiety'
           className={classnames({ active: nav.tab === "2" })}
           onClick={() => toggle("2")}
         >

@@ -11,13 +11,9 @@
 .post-form {
   padding: 3%;
   border-bottom: lightgray solid 1px;
+  width: 100%;
 }
 
 .loading-spinner {
-  flex-direction: row;
   padding: 3%;
-}
-
-.post-header {
-  justify-content: space-between;
 }

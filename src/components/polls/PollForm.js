@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import "./Posts.css";
 import {
   Col,
   Button,
@@ -14,7 +13,7 @@ import axios from "axios";
 import { BASE_URL } from "../../properties/consts";
 import { GroupContext } from "../../contexts/GroupContext";
 
-const PostForm = props => {
+const PollForm = props => {
   const [userState, dispatchUser] = useContext(UserContext);
   const [groupId, dispatchGroup] = useContext(GroupContext);
   const [loading, setLoading] = useState(false);
@@ -116,4 +115,4 @@ const PostForm = props => {
   );
 };
 
-export default PostForm;
+export default PollForm;

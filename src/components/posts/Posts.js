@@ -1,16 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import "./Posts.css";
-import {
-  Spinner,
-  Toast,
-  ToastBody,
-  ToastHeader,
-  Button,
-  Pagination,
-  PaginationItem,
-  PaginationLink
-} from "reactstrap";
+import { Spinner, Toast, ToastBody, ToastHeader, Button } from "reactstrap";
 import { UserContext } from "../../contexts/UserContext";
 import { Redirect } from "react-router-dom";
 import { NavContext } from "../../contexts/NavContext";
@@ -91,6 +82,7 @@ const Posts = props => {
 
   const handlePageChange = pageNo => {
     setCurrentPage(pageNo);
+    setLoading(true);
   };
 
   useEffect(() => {
@@ -120,7 +112,7 @@ const Posts = props => {
       {loading ? (
         <Spinner className='loading-spinner' color='primary' />
       ) : (
-        <div>
+        <div className='posts'>
           {userState.user.role === "tutor" && <PostForm update={updatePosts} />}
           {groupId && posts.length !== 0 ? (
             <div>
@@ -154,6 +146,7 @@ const Posts = props => {
             </div>
           )}
           <MyPagination
+            className='pages'
             current={currentPage}
             totalPages={totalPages}
             handlePageChange={handlePageChange}
