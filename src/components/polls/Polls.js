@@ -9,6 +9,7 @@ import { GroupContext } from "../../contexts/GroupContext";
 import PollForm from "./PollForm";
 import { BASE_URL } from "../../properties/consts";
 import MyPagination from "../pagination/MyPagination";
+import Poll from "./Poll";
 
 const Polls = props => {
   const [userState, dispatch] = useContext(UserContext);
@@ -58,7 +59,7 @@ const Polls = props => {
       .then(response => {
         dispatch({
           type: "MESSAGE",
-          payload: { message: "Pomyślnie usunięto post", type: "success" }
+          payload: { message: "Pomyślnie usunięto ankietę", type: "success" }
         });
         updatePolls();
       })
@@ -77,19 +78,6 @@ const Polls = props => {
             payload: { message: "Coś poszło nie tak", type: "danger" }
           });
         }
-      });
-  };
-
-  const handleVote = event => {
-    setLoading(true);
-    axios
-      .put(`${BASE_URL}/poll/`, { answerId: event.target.value }, config)
-      .then(response => {
-        dispatch({
-          type: "MESSAGE",
-          payload: { message: "Pomyślnie oddano głos", type: "success" }
-        });
-        updatePolls();
       });
   };
 
@@ -126,47 +114,13 @@ const Polls = props => {
         <Spinner className='loading-spinner' color='primary' />
       ) : (
         <div className='posts'>
-          {userState.user.role === "tutor" && <div />}
+          {userState.user.role === "tutor" && <PollForm update={updatePolls} />}
           {groupId && polls.length !== 0 ? (
             <div>
               {polls.map(poll => {
                 return (
                   <div className='p-3 my-2 rounded'>
-                    <div>
-                      <h2>{poll.question}</h2>
-                      <h5>Data rozpoczęcia: {poll.startDate}</h5>
-                      <h5>Data zakończenia: {poll.finishDate}</h5>
-                      <h6>Zagłosowało: {poll.totalVotes}</h6>
-                      {poll.answers.map(answer => {
-                        return (
-                          <div>
-                            <div className='text-center'>{answer.answer}</div>
-                            <Progress
-                              className='answer-progress'
-                              value={
-                                poll.totalVotes > 0
-                                  ? (answer.votes / poll.totalVotes) * 100
-                                  : 0
-                              }
-                            >
-                              {poll.totalVotes > 0
-                                ? (answer.votes / poll.totalVotes) * 100
-                                : 0}
-                              %
-                            </Progress>
-                            {userState.user.role === "member" && (
-                              <Button
-                                color='success'
-                                onClick={handleVote}
-                                value={answer.id}
-                              >
-                                Wybierz
-                              </Button>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
+                    <Poll poll={poll} />
                     {userState.user.role === "tutor" && (
                       <Button
                         color='danger'

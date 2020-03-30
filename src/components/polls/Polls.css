@@ -1,3 +1,7 @@
 .answer-progress {
   margin-bottom: 1vw;
 }
+
+.disabled-poll {
+  opacity: 0.7;
+}

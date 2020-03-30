@@ -17,9 +17,11 @@ const PollForm = props => {
   const [userState, dispatchUser] = useContext(UserContext);
   const [groupId, dispatchGroup] = useContext(GroupContext);
   const [loading, setLoading] = useState(false);
+  const [answers, setAnswers] = useState([]);
   const [formState, setFormState] = useState({
-    title: "",
-    post: ""
+    question: "",
+    startDate: "",
+    finishDate: ""
   });
 
   const handleSubmit = event => {
@@ -29,22 +31,27 @@ const PollForm = props => {
         Authorization: "Bearer " + userState.user.token
       }
     };
+    let answersDTO = answers.map(answer => {
+      return { answer: answer.text };
+    });
     let body = {
       ...formState,
-      groupId: groupId
+      answers: answersDTO,
+      tutorsGroupId: groupId
     };
     setLoading(true);
     axios
-      .post(`${BASE_URL}/post`, body, config)
+      .post(`${BASE_URL}/poll`, body, config)
       .then(response => {
         dispatchUser({
           type: "MESSAGE",
-          payload: { message: "Pomyślnie dodano post", type: "success" }
+          payload: { message: "Pomyślnie dodano ankietę", type: "success" }
         });
         props.update();
         setLoading(false);
       })
       .catch(error => {
+        console.log(error);
         setLoading(false);
         if (error.response === undefined) {
           dispatchUser({
@@ -69,41 +76,85 @@ const PollForm = props => {
     });
   };
 
+  const handleAnswerChange = event => {
+    let current_answers = [...answers];
+    current_answers[event.target.id].text = event.target.value;
+    setAnswers(current_answers);
+  };
+
+  const addAnswer = event => {
+    let size = answers.length;
+    let current_answers = [...answers];
+    current_answers.push({ no: size, text: "" });
+    setAnswers(current_answers);
+  };
+
   return (
     <div className='post-form'>
       {loading ? (
         <Spinner color='primary' />
       ) : (
         <Form onSubmit={handleSubmit}>
-          <h3>Dodaj post</h3>
+          <h3>Dodaj ankietę</h3>
           <FormGroup row>
             <Label for='title' sm={2}>
-              Tytuł
+              Pytanie
             </Label>
             <Col sm={10}>
               <Input
-                value={formState.title}
+                value={formState.question}
                 onChange={handleChange}
                 type='text'
-                id='title'
-                placeholder='Tytuł posta'
+                id='question'
               />
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Label for='exampleText' sm={2}>
-              Post
-            </Label>
+            <Label sm={2}>Data rozpoczęcia (RRRR-MM-DD GG:MM:SS)</Label>
             <Col sm={10}>
               <Input
-                value={formState.post}
+                value={formState.startDate}
                 onChange={handleChange}
-                type='textarea'
-                name='post'
-                id='post'
+                type='text'
+                name='startDate'
+                id='startDate'
+                placeholder='RRRR-MM-DD GG:MM:SS'
               />
             </Col>
           </FormGroup>
+          <FormGroup row>
+            <Label sm={2}>Data zakończenia (RRRR-MM-DD GG:MM:SS)</Label>
+            <Col sm={10}>
+              <Input
+                value={formState.finishDate}
+                onChange={handleChange}
+                type='text'
+                name='finishDate'
+                id='finishDate'
+                placeholder='RRRR-MM-DD GG:MM:SS'
+              />
+            </Col>
+          </FormGroup>
+          <div>Odpowiedzi:</div>
+          {answers.map(answer => {
+            return (
+              <FormGroup row>
+                <Col sm={10}>
+                  <Input
+                    value={answers[answer.no].text}
+                    onChange={handleAnswerChange}
+                    type='text'
+                    name={answer.no}
+                    id={answer.no}
+                    key={answer.no}
+                  />
+                </Col>
+              </FormGroup>
+            );
+          })}
+          <Button className='mb-2' onClick={addAnswer}>
+            Dodaj odpowiedź
+          </Button>
           <FormGroup check row>
             <Col sm={10}>
               <Button type='submit'>Submit</Button>
