@@ -1,24 +1,16 @@
-import React, { useContext, useState, useEffect } from "react";
-import axios from "axios";
-import "./Polls.css";
-import { Spinner, Progress, Button } from "reactstrap";
+import React, { useState, useContext, useEffect } from "react";
+import { Spinner, Toast, ToastHeader, ToastBody, Button } from "reactstrap";
 import { UserContext } from "../../contexts/UserContext";
-import { Redirect } from "react-router-dom";
-import { NavContext } from "../../contexts/NavContext";
-import { GroupContext } from "../../contexts/GroupContext";
-import PollForm from "./PollForm";
 import { BASE_URL } from "../../properties/consts";
-import MyPagination from "../pagination/MyPagination";
-import Poll from "./Poll";
+import axios from "axios";
+import { GroupContext } from "../../contexts/GroupContext";
+import { Redirect } from "react-router-dom";
 
-const Polls = props => {
+const TutorGroupRequest = props => {
   const [userState, dispatch] = useContext(UserContext);
-  const [nav, dispatchNav] = useContext(NavContext);
   const [groupId, dispatchGroup] = useContext(GroupContext);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [polls, setPolls] = useState([]);
+  const [requests, setRequests] = useState([]);
 
   let config = {
     headers: {
@@ -26,13 +18,12 @@ const Polls = props => {
     }
   };
 
-  const updatePolls = () => {
+  const updateRequests = () => {
     axios
-      .get(`${BASE_URL}/poll?groupId=${groupId}&page=${currentPage}`, config)
+      .get(`${BASE_URL}/tutorsgroup/requests?groupId=${groupId}`, config)
       .then(response => {
         console.log(response.data);
-        setTotalPages(response.data.totalPages);
-        setPolls(response.data.polls);
+        setRequests(response.data);
         setLoading(false);
       })
       .catch(error => {
@@ -53,46 +44,37 @@ const Polls = props => {
       });
   };
 
-  const handleDelete = event => {
-    axios
-      .delete(`${BASE_URL}/poll/${event.target.value}`, config)
-      .then(response => {
-        dispatch({
-          type: "MESSAGE",
-          payload: { message: "Pomyślnie usunięto ankietę", type: "success" }
-        });
-        updatePolls();
-      })
-      .catch(error => {
-        setLoading(false);
-        if (error.response === undefined) {
-          dispatch({
-            type: "MESSAGE",
-            payload: { message: "Błąd serwera", type: "danger" }
-          });
-        } else if (error.response.data.status === 401) {
-          dispatch({ type: "TIMEOUT" });
-        } else {
-          dispatch({
-            type: "MESSAGE",
-            payload: { message: "Coś poszło nie tak", type: "danger" }
-          });
-        }
-      });
-  };
-
-  const handlePageChange = pageNo => {
-    setCurrentPage(pageNo);
+  const acceptRequest = event => {
     setLoading(true);
+    axios
+      .put(`${BASE_URL}/tutorsgroup/requests/${event.target.value}`, {}, config)
+      .then(response => {
+        console.log(response);
+        updateRequests();
+      })
+      .catch(error => {
+        setLoading(false);
+        console.log(error);
+        if (error.response === undefined) {
+          dispatch({
+            type: "MESSAGE",
+            payload: { message: "Błąd serwera", type: "danger" }
+          });
+        } else if (error.response.data.status === 401) {
+          dispatch({ type: "TIMEOUT" });
+        } else {
+          dispatch({
+            type: "MESSAGE",
+            payload: { message: "Coś poszło nie tak", type: "danger" }
+          });
+        }
+      });
   };
 
   useEffect(() => {
-    if (nav.tab !== "2") {
-      dispatchNav({ type: "CHANGE_TAB", tab: "2" });
-    }
     if (userState.user.isAuthenticated && groupId !== null) {
       setLoading(true);
-      updatePolls();
+      updateRequests();
     }
 
     return () => {
@@ -106,7 +88,7 @@ const Polls = props => {
         });
       }
     };
-  }, [currentPage, groupId]);
+  }, [groupId]);
 
   return userState.user.isAuthenticated ? (
     <div className='posts'>
@@ -114,37 +96,33 @@ const Polls = props => {
         <Spinner className='loading-spinner' color='primary' />
       ) : (
         <div className='posts'>
-          {userState.user.role === "tutor" && <PollForm update={updatePolls} />}
-          {groupId && polls.length !== 0 ? (
+          {groupId && requests.length !== 0 ? (
             <div>
-              {polls.map(poll => {
+              {requests.map(request => {
                 return (
                   <div className='p-3 my-2 rounded'>
-                    <Poll poll={poll} />
-                    {userState.user.role === "tutor" && (
-                      <Button
-                        color='danger'
-                        onClick={handleDelete}
-                        value={poll.id}
-                      >
-                        Usuń
-                      </Button>
-                    )}
+                    <Toast>
+                      <ToastHeader>{request.username}</ToastHeader>
+                      <ToastBody>
+                        {request.name} {request.surname}
+                      </ToastBody>
+                    </Toast>
+                    <Button
+                      color='success'
+                      onClick={acceptRequest}
+                      value={request.requestId}
+                    >
+                      Zaakceptuj
+                    </Button>
                   </div>
                 );
               })}
             </div>
           ) : (
             <div className='no-posts'>
-              <h2>Nie ma ankiet do wyświetlenia na tej stronie</h2>
+              <h2>Nie ma próśb do wyświetlenia na tej stronie</h2>
             </div>
           )}
-          <MyPagination
-            className='pages'
-            current={currentPage}
-            totalPages={totalPages}
-            handlePageChange={handlePageChange}
-          />
         </div>
       )}
     </div>
@@ -153,4 +131,4 @@ const Polls = props => {
   );
 };
 
-export default Polls;
+export default TutorGroupRequest;

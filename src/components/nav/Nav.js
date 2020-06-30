@@ -48,6 +48,16 @@ const Navbar = props => {
         >
           Oceny
         </NavLink>
+      ),
+      four: (
+        <NavLink
+          tag={Link}
+          to='/grupy'
+          className={classnames({ active: nav.tab === "4" })}
+          onClick={() => toggle("4")}
+        >
+          Grupy
+        </NavLink>
       )
     };
   } else {
@@ -90,6 +100,7 @@ const Navbar = props => {
       <NavItem className='navbar-item'>{links.one}</NavItem>
       <NavItem className='navbar-item'>{links.two}</NavItem>
       <NavItem className='navbar-item'>{links.three}</NavItem>
+      <NavItem className='navbar-item'>{links.four}</NavItem>
     </Nav>
   );
 };
