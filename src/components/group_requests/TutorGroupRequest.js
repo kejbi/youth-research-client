@@ -49,7 +49,13 @@ const TutorGroupRequest = props => {
     axios
       .put(`${BASE_URL}/tutorsgroup/requests/${event.target.value}`, {}, config)
       .then(response => {
-        console.log(response);
+        dispatch({
+          type: "MESSAGE",
+          payload: {
+            message: "Pomyślnie zaakceptowano prośbę",
+            type: "success"
+          }
+        });
         updateRequests();
       })
       .catch(error => {

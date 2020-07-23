@@ -7,11 +7,11 @@ import { NavContext } from "../../contexts/NavContext";
 
 import { Link } from "react-router-dom";
 
-const Navbar = props => {
+const Navbar = (props) => {
   const [userState, dispatch] = useContext(UserContext);
   const [nav, dispatchNav] = useContext(NavContext);
 
-  const toggle = tab => {
+  const toggle = (tab) => {
     if (nav.tab !== tab) {
       dispatchNav({ type: "CHANGE_TAB", tab: tab });
       dispatch({ type: "MESSAGE_CLEAR" });
@@ -43,6 +43,8 @@ const Navbar = props => {
       ),
       three: (
         <NavLink
+          tag={Link}
+          to='/oceny'
           className={classnames({ active: nav.tab === "3" })}
           onClick={() => toggle("3")}
         >
@@ -58,7 +60,7 @@ const Navbar = props => {
         >
           Grupy
         </NavLink>
-      )
+      ),
     };
   } else {
     links = {
@@ -91,7 +93,7 @@ const Navbar = props => {
         >
           Rejestracja
         </NavLink>
-      )
+      ),
     };
   }
 

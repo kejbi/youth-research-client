@@ -53,7 +53,10 @@ const MemberGroupRequests = props => {
         config
       )
       .then(response => {
-        console.log(response);
+        dispatch({
+          type: "MESSAGE",
+          payload: { message: "Pomyślnie złożono prośbę", type: "success" }
+        });
         updateGroups();
       })
       .catch(error => {
